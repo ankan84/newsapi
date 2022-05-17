@@ -1,38 +1,25 @@
 import axios from 'axios';
 import Navbar from './Navbar';
-import Footer from './Footer';
+
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import Inter from './Inter'
-const axiox = require('axios');
-
+import articles from './api';
 
 
 function Home() {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(articles);
+    
     const [visibal, setVisibal] = useState(5);
-
-
-    const apiFunc =async () => {
-        const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=4583328f31604630a0ce81abaf0821ab`;
-        axios.get(url).then((response) => {
-            setData(response.data.articles);
-        }).catch((e) => {
-            console.log(e);
-        })
-        
-    }
+    
+    
     const showItem = () => {
 
         setVisibal(visibal + 5)
     }
-    useEffect(() => {
-
-        apiFunc();
-
-    }, [])
+  
     return (
-        <>
+        
             <div className="main_div">
                 <Navbar></Navbar>
 
@@ -47,14 +34,25 @@ function Home() {
                         </div>
                     </div>
                     {
-                        data.slice(0, visibal).map((ele, index) => {
-                            return (<Inter data={ele}></Inter>)
-                        })
-
+                      data?(
+                          <>
+                              {
+                                  
+                        data.slice(0, visibal).map((ele)=>{
+                                 return(
+                                    <Inter my_data={ele}></Inter>
+                                      )
+                                  }) 
+                              }
+                          </>
+                      ):(<></>)
+                      
                     }
 
+
+
                 </div>
-                {visibal <= data.length - 1 ? (
+                {visibal <= articles.length - 1 ? (
                     <div className='btn_div'>
                         <button className='btn' onClick={showItem} >Load More</button>
                     </div>
@@ -62,7 +60,7 @@ function Home() {
                 }
             </div>
              
-        </>
+        
     )
 }
 
